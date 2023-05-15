@@ -1,0 +1,220 @@
+---
+title: "Getting Started with the didet Package"
+author: "Takahide Yanagi (yanagi@econ.kyoto-u.ac.jp)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with the didet Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8, 
+  fig.height = 5 
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+
+```{r setup, include = FALSE}
+library(didet)
+```
+
+## Introduction
+
+The **didet** package provides tools for differences-in-differences (DiD) 
+estimation when the treatment variable of interest may be non-binary 
+and its value may change in each time period.
+The package implements the doubly robust estimation of the 
+average treatment effect for movers using the concept of effective treatment.
+The methods are developed by [Yanagi (2023) "An effective treatment approach to difference-in-differences with general treatment patterns"](https://doi.org/10.48550/arXiv.2212.13226).
+
+## Installation
+
+Get the package from GitHub:
+
+```{r, eval = F, echo = T}
+# install.packages("devtools") # if necessary
+devtools::install_github("tkhdyanagi/didet", build_vignettes = TRUE)
+```
+
+## Package Function
+
+The **didet** package provides the following function:
+
+- `didet()`: DiD estimation with general treatment patterns using the concept of effective treatment.
+
+#### Arguments
+
+The `didet()` function has the following arguments:
+
+- `yname`: The name of the outcome variable
+- `dname`: The name of the treatment variable
+- `tname`: The name of the time period
+- `idname`: The name of the unit index
+- `xformla`: A formula for the unit-specific covariates to be included.
+   It should be of the form `xformla = ~ X + Z`.
+   Default is `xformla = ~ 1`.
+- `data`: A data.frame of panel data (long format)
+- `specification`: A character for the effective treatment specification.
+   Options are "once", "event", "number", and "aggregate".
+   Default is "event".
+- `alp`: The significance level.
+   Default is 0.05.
+- `nboot`: The number of bootstrap repetitions.
+   Default is 1000.
+
+#### Returns
+
+The `didet()` function returns a list that contains the following elements:
+
+- `ATEM`:   A data.frame that collects the estimation results for $ATEM(t, s, e)$ and $ATEM(t, s, r, e)$.
+- `mover`:  A data.frame that collects the estimation results for the probabilities of being movers.
+- `stayer`: A data.frame that collects the estimation results for the probabilities of being stayers.
+- `figure`: A list that contains the figures for $ATEM(t,s,e)$ and $ATEM(t, s, r, e)$.
+
+## Example
+
+We begin by generating artificial data from the `datageneration()` function.
+
+```{r, eval = T, echo = T}
+# Generate artificial data
+# N: The number of cross-sectional units
+# S: The length of time series
+set.seed(1)
+data <- didet::datageneration(N = 1000, S = 4)
+head(data)
+```
+
+#### The event specification
+
+The DiD estimation using the event specification:
+```{r, eval = T, echo = T}
+# DiD estimation
+did_est <- didet::didet(yname = "Y",
+                        dname = "D",
+                        tname = "period",
+                        idname = "id",
+                        xformla = ~ X,
+                        data = data,
+                        specification = "event",
+                        alp = 0.05,
+                        nboot = 1000)
+```
+
+The ATEM estimation results are:
+```{r, eval = T, echo = T}
+# DiD estimation
+did_est$ATEM
+```
+
+The rows with `r` equal to `NA` present the estimation results for $\text{ATEM}(t, s, e)$, that is, the estimation results for "post-treatment periods".
+For example, the first row shows the estimation results for $\text{ATEM}(2, 1, 2)$, the average treatment effect in period 2 ($t = 2$) for movers whose treatment status in period $1$ ($s = 1$) is $0$ and whose event date is period 2 ($e = 2$). 
+The rows with `r` unequal to `NA` correspond to the estimation results for $\text{ATEM}(t, s, r, e)$, that is, the estimation results for "pre-treatment periods", which should be approximately 0 under the parallel trends assumption.
+
+The resulting figures are:
+```{r, eval = T, echo = T}
+# Event date = 2
+did_est$figure$e2
+# Event date = 3
+did_est$figure$e3
+# Event date = 4
+did_est$figure$e4
+```
+
+In these figures, the dots and bars correspond to the ATEM estimates and $1 - \alpha$ uniform confidence bands, with the x-axis indicating the time period $t$.
+
+#### The once specification
+
+The DiD estimation using the once specification:
+```{r, eval = T, echo = T}
+# DiD estimation
+did_est <- didet::didet(yname = "Y",
+                        dname = "D",
+                        tname = "period",
+                        idname = "id",
+                        xformla = ~ X,
+                        data = data,
+                        specification = "once",
+                        alp = 0.05,
+                        nboot = 1000)
+```
+
+The ATEM estimation results are:
+```{r, eval = T, echo = T}
+# DiD estimation
+did_est$ATEM
+```
+
+The resulting figure is:
+```{r, eval = T, echo = T}
+did_est$figure$e1
+```
+
+#### The number specification
+
+The DiD estimation using the number specification:
+```{r, eval = T, echo = T}
+# DiD estimation
+did_est <- didet::didet(yname = "Y",
+                        dname = "D",
+                        tname = "period",
+                        idname = "id",
+                        xformla = ~ X,
+                        data = data,
+                        specification = "number",
+                        alp = 0.05,
+                        nboot = 1000)
+```
+
+The ATEM estimation results are:
+```{r, eval = T, echo = T}
+# DiD estimation
+did_est$ATEM
+```
+
+The resulting figures are:
+```{r, eval = T, echo = T}
+# Number of treatment adoptions = 1
+did_est$figure$e1
+# Number of treatment adoptions = 2
+did_est$figure$e2
+# Number of treatment adoptions = 3
+did_est$figure$e3
+```
+
+In the last two figures, the estimation results for $t = 2$ and $t \in \{ 2, 3 \}$ are suppressed because no units experienced the two and three times of treatment adoptions in these time periods.
+
+#### Aggregation
+
+We can obtain a single aggregating estimate by taking the time series mean of the ATEM estimates obtained from the once specification, with
+```{r, eval = T, echo = T}
+# DiD estimation
+did_est <- didet::didet(yname = "Y",
+                        dname = "D",
+                        tname = "period",
+                        idname = "id",
+                        xformla = ~ X,
+                        data = data,
+                        specification = "aggregate",
+                        alp = 0.05,
+                        nboot = 1000)
+```
+
+The ATEM estimation results are:
+```{r, eval = T, echo = T}
+# DiD estimation
+did_est$ATEM
+```
+
+No figure is available in this case.
+
+## References
+
+- Yanagi, T., 2023. 
+An effective treatment approach to difference-in-differences with general treatment patterns. 
+arXiv preprint arXiv:2212.13226.
+[Link](https://doi.org/10.48550/arXiv.2212.13226)

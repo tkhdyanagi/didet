@@ -1,0 +1,33 @@
+Package: didet
+Type: Package
+Title: An Effective Treatment Approach to Difference-in-Differences with General Treatment Patterns
+Version: 0.1.0
+Authors@R: c(
+    person("Takahide", "Yanagi", email = "yanagi@econ.kyoto-u.ac.jp", role = c("aut", "cre", "cph"), comment = c(ORCID = "https://orcid.org/0000-0003-3975-5518"))
+    )
+Description: Difference-in-differences is a powerful causal inference method.
+    This package provides tools for difference-in-differences estimation 
+    when the treatment variable of interest may be non-binary 
+    and its value may change in each time period.
+    The methods are developed by Yanagi (2023)<10.48550/arXiv.2212.13226>.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+Imports: 
+    data.table,
+    dplyr,
+    DRDID,
+    ggplot2,
+    magrittr,
+    methods,
+    purrr,
+    rlang,
+    stats,
+    utils
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr

@@ -1,0 +1,149 @@
+---
+title: "Review of An Effective Treatment Approach to Difference-in-Differences with General Treatment Patterns"
+author: "Takahide Yanagi (yanagi@econ.kyoto-u.ac.jp)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Review of An Effective Treatment Approach to Difference-in-Differences with General Treatment Patterns}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+```{r setup, include = FALSE}
+library(didet)
+```
+
+## Introduction
+
+This vignette briefly reviews [Yanagi (2023) "An effective treatment approach to difference-in-differences with general treatment patterns"](https://doi.org/10.48550/arXiv.2212.13226).
+
+## Setting
+
+We have balanced panel data $\{ (Y_{it}, D_{it}, X_i): i = 1, \dots, N; t = 1, \dots, T \}$, where
+
+- $Y_{it}$: An outcome variable for unit $i$ in period $t$.
+- $D_{it}$: A possibly non-binary treatment variable for unit $i$ in period $t$.
+- $X_i$: A unit $i$ specific covariate vector.
+
+Suppose that $D_{it} = 0$ indicates that unit $i$ is a comparison unit in period $t$.
+
+The goal is to assess the instantaneous and dynamic impacts of the treatment on the outcome.
+With general treatment patterns, there may be many treatment paths, and it is generally difficult to estimate treatment parameters defined with the potential outcome given the entire path of treatment adoptions.
+To circumvent this problem, [Yanagi (2023)](https://doi.org/10.48550/arXiv.2212.13226) proposes an effective treatment approach to DiD estimation.
+
+## Effective Treatment
+
+For each $i$ and $t$, denote $\mathbf{D}_{it} = (D_{i1}, \dots, D_{it})$ denote the $t$-dimensional vector of treatment adoptions for unit $i$.
+
+The effective treatment function converts the entire treatment path $\mathbf{D}_{iT}$ into an empirically tractable low-dimensional variable $E_{it}$ that researchers believe to be relevant to the outcome in period $t$.
+Specifically, consider the realized effective treatment $E_{it} = E_t(\mathbf{D}_{iT})$ with a user-specified function $E_t$.
+Suppose that $E_{it} = 0$ indicates that unit $i$ is a comparison unit in period $t$ under the chosen effective treatment $E_t$.
+
+For example, we consider the following specifications useful for understanding the instantaneous and dynamic treatment effects:
+
+- The *once* specification:
+\begin{align*}
+  E_{it}^{\text{O}} = \mathbf{1}\{ \mathbf{D}_{it} \neq 0 \}.
+\end{align*}
+- The *event* specification:
+\begin{align*}
+  E_{it}^{\text{E}} = 
+		\begin{cases}
+			\min \{ s \le t : D_{is} \neq 0 \} & \text{if $\mathbf{D}_{it} \neq 0$} \\
+			0 &  \text{otherwise}
+		\end{cases}
+\end{align*}
+- The *number* specification: 
+\begin{align*}
+  E_{it}^{\text{N}} = \sum_{s=1}^t \mathbf{1}\{ D_{is} \neq 0 \}.
+\end{align*}
+
+Let $E_{it}^*$ denote the "true" effective treatment specification.
+Then, the potential outcome for unit $i$ in period $t$ given $E_{it}^* = e^*$ is well defined, which is denoted as $Y_{it}^*(e^*)$.
+By constraction, $Y_{it} = Y_{it}^*(E_{it}^*)$.
+
+## Target Parameter
+
+Given a user-specified effective treatment specification $E_t$, the parameter of interest is the average treatment effect for movers (ATEM).
+For two time periods $t > s$ and an effective treatment intensity $e \neq 0$, the ATEM is defined by
+\begin{align*}
+  \text{ATEM}(t, s, e) = \mathbb{E}[ Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,e} = 1 ],  
+\end{align*}
+where $M_{i,t,s,e} = \mathbf{1}\{ E_{it} = e, E_{is} = 0 \}$ indicates a mover.
+
+[Yanagi (2023)](https://doi.org/10.48550/arXiv.2212.13226) shows that the causal interpretation of the ATEM parameter depends on the relationship between the pre-specified $E_t$ and the true $E_t^*$.
+Importantly, the ATEM has meaningful causal interpretation even when the pre-specified $E_t$ is "incorrect" in the sense that the potential outcome given $E_t$ is not well defined.
+
+The choice of $(t, s, e)$ depends on the specification of effective treatment:
+
+- The *once* specification:
+Let $\text{ATEM}^{\text{O}}(t, s, 1) = \mathbb{E} [ Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,1}^{\text{O}} = 1 ]$, where $M_{i,t,s,1}^{\text{O}} = \mathbf{1}\{ E_{it}^{\text{O}} = 1, E_{is}^{\text{O}} = 0 \}$.
+By setting $s = 1$, we obtain
+\begin{align*}
+	\text{ATEM}^{\text{O}}(t, 1, 1)
+	= \mathbb{E} [ Y_{it} - Y_{it}^*(0) \mid D_{i1} = 0, \mathbf{D}_{it} \neq 0 ],
+\end{align*}
+which captures the composition of the instantaneous and dynamic treatment effects, that is, the effect of receiving some treatment intensity at least once between periods $2$ and $t$ for those who did not receive the treatment in the first period.
+- The *event* specification:
+Let $\text{ATEM}^{\text{E}}(t, s, e) = \mathbb{E} [ Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,e}^{\text{E}} = 1 ]$, where $M_{i,t,s,e}^{\text{E}} = \mathbf{1}\{ E_{it}^{\text{E}} = e, E_{is}^{\text{E}} = 0 \}$ with $e \ge 2$ and $t \ge e$.
+Setting $s = e - 1$, we can see that
+\begin{align*}
+	\text{ATEM}^{\text{E}}(t, e-1, e)
+	= \mathbb{E} \left[ Y_{it} - Y_{it}^*(0) \mid \mathbf{D}_{i,e-1} = 0, D_{ie} \neq 0 \right].
+\end{align*}
+This indicates the ATE in period $t$ for those who first received some treatment intensity in period $e$.
+Estimating this ATEM over a set of $(t, e)$ enables us to understand the instantaneous and dynamic treatment effects separately.
+Specifically, $\text{ATEM}^{\text{E}}(t, e-1, e)$ with $t = e$ (resp. with $t > e$) is informative about the instantaneous (resp. dynamic) effect of the first treatment received in period $e$.
+- The *number* specification:
+Define $\text{ATEM}^{\text{N}}(t, s, e) = \mathbb{E} [ Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,e}^{\text{N}} = 1 ]$, where $M_{i,t,s,e}^{\text{N}} = \mathbf{1}\{ E_{it}^{\text{N}} = e, E_{is}^{\text{N}} = 0 \}$ with $e \ge 1$ and $t \ge e + 1$.
+When we set $s = 1$, the ATEM reduces to
+\begin{align*}
+	\text{ATEM}^{\text{N}}(t, 1, e)
+	= \mathbb{E} \left[ Y_{it} - Y_{it}^*(0) \; \middle| \; D_{i1} = 0, \sum_{r=2}^t \mathbf{1}\{ D_{ir} \neq 0 \} = e \right].
+\end{align*}
+The ATEM in this case recovers the ATE in period $t$ for those who were not treated in the first period and received treatment $e$ times in $t$ periods.
+By estimating this ATEM over a set of $(t, e)$, we can separately assess the instantaneous and dynamic effects of the number of treatment adoptions on the outcome.
+
+## Identification, Estimation, and Statistical Inference Methods
+
+Building on [Callaway and Sant'Anna (2021)](https://doi.org/10.1016/j.jeconom.2020.12.001), [Yanagi (2023)](https://doi.org/10.48550/arXiv.2212.13226) develops doubly robust identification and estimation methods and a multiplier bootstrap inference procedure for the ATEM parameter under a parallel trends assumption.
+See the paper for more details.
+
+## Pre-trends Test
+
+Similar to the staggered adoption case, we can partly justify the validity of parallel trends by checking "pre-trends".
+To be specific, for three time periods $t > s \ge r$ and an effective treatment intesnity $e \neq 0$, define
+\begin{align*}
+  \text{ATEM}(t, s, r, e) = \mathbb{E}[ Y_{ir} - Y_{ir}^*(0) \mid M_{i,t,s,e} = 1 ].
+\end{align*}
+Under the parallel trends assumption, it can be shown that $\text{ATEM}(t, s, r, e) = 0$.
+Thus, the parallel trends assumption would be implausible if we find statistical evidence against $\text{ATEM}(t, s, r, e) = 0$.
+
+## Practical Recommendations
+
+It is common practice to perform event study analyses prior to formal DiD estimation.
+Thus, it would be natural to take the event specification as a good starting point and to plot $\text{ATEM}^{\mathrm{E}}(t, e-1, e)$ over a set of $(t, e)$, including ``pre-trends'' to assess the validity of parallel trends.
+Then, it would be desirable to further examine the treatment effect heterogeneity by trying the number specification. 
+Finally, to obtain more precise estimates, it would be recommended to estimate $\mathrm{ATEM}^{\mathrm{O}}(t, 1, 1)$ and its time-series average as useful aggregation parameters, that is,
+\begin{align*}
+	\mathrm{ATEM}^{\mathrm{AGG}}
+	= \frac{1}{(T - 1)} \sum_{t=2}^T \text{ATEM}^{\text{O}}(t, 1, 1).
+\end{align*}
+
+## References
+
+- Callaway, B., and Sant’Anna, P. HC, 2021.
+Difference-in-differences with multiple time periods. 
+Journal of Econometrics 225(2), 200-230.
+[Link](https://doi.org/10.1016/j.jeconom.2020.12.001)
+- Yanagi, T., 2023. 
+An effective treatment approach to difference-in-differences with general treatment patterns. 
+arXiv preprint arXiv:2212.13226.
+[Link](https://doi.org/10.48550/arXiv.2212.13226)

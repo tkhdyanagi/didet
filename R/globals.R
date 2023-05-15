@@ -1,0 +1,13 @@
+utils::globalVariables(c(
+  "CIL",
+  "CIU",
+  "E",
+  "est",
+  "id",
+  "ind_mover",
+  "ind_stayer",
+  "period",
+  "prepost",
+  "unit",
+  "Y"
+))
