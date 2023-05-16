@@ -58,8 +58,8 @@ The `didet()` function has the following arguments:
 - `xformla`: A formula for the unit-specific covariates to be included.
    It should be of the form `xformla = ~ X + Z`.
    Default is `xformla = ~ 1`.
-- `data`: A data.frame of panel data (long format)
-- `specification`: A character for the effective treatment specification.
+- `data`: A data.frame of balanced panel data (long format)
+- `specification`: A character specifying the effective treatment function.
    Options are "once", "event", "number", and "aggregate".
    Default is "event".
 - `alp`: The significance level.
@@ -71,27 +71,27 @@ The `didet()` function has the following arguments:
 
 The `didet()` function returns a list that contains the following elements:
 
-- `ATEM`:   A data.frame that collects the estimation results for $ATEM(t, s, e)$ and $ATEM(t, s, r, e)$.
+- `ATEM`:   A data.frame that collects the estimation results for $\mathrm{ATEM}(t, s, e)$ and $\mathrm{ATEM}(t, s, r, e)$.
 - `mover`:  A data.frame that collects the estimation results for the probabilities of being movers.
 - `stayer`: A data.frame that collects the estimation results for the probabilities of being stayers.
-- `figure`: A list that contains the figures for $ATEM(t,s,e)$ and $ATEM(t, s, r, e)$.
+- `figure`: A list that contains the figures for $\mathrm{ATEM}(t,s,e)$ and $\mathrm{ATEM}(t, s, r, e)$.
 
 ## Example
 
-We begin by generating artificial data from the `datageneration()` function.
+We begin by generating artificial balanced panel data using the `datageneration()` function.
 
 ```{r, eval = T, echo = T}
-# Generate artificial data
-# N: The number of cross-sectional units
-# S: The length of time series
+# Generate artificial balanced panel data
+# N: The number of the cross-sectional units
+# S: The length of the time series
 set.seed(1)
 data <- didet::datageneration(N = 1000, S = 4)
 head(data)
 ```
 
-#### The event specification
+#### The *event* specification
 
-The DiD estimation using the event specification:
+The DiD estimation using the *event* specification:
 ```{r, eval = T, echo = T}
 # DiD estimation
 did_est <- didet::didet(yname = "Y",
@@ -111,9 +111,9 @@ The ATEM estimation results are:
 did_est$ATEM
 ```
 
-The rows with `r` equal to `NA` present the estimation results for $\text{ATEM}(t, s, e)$, that is, the estimation results for "post-treatment periods".
-For example, the first row shows the estimation results for $\text{ATEM}(2, 1, 2)$, the average treatment effect in period 2 ($t = 2$) for movers whose treatment status in period $1$ ($s = 1$) is $0$ and whose event date is period 2 ($e = 2$). 
-The rows with `r` unequal to `NA` correspond to the estimation results for $\text{ATEM}(t, s, r, e)$, that is, the estimation results for "pre-treatment periods", which should be approximately 0 under the parallel trends assumption.
+The rows with `r` equal to `NA` present the estimation results for $\mathrm{ATEM}(t, s, e)$, that is, the estimation results for "post-treatment periods".
+For example, the first row shows the estimation results for $\mathrm{ATEM}(2, 1, 2)$, the average treatment effect in period 2 ($t = 2$) for movers who are comparison units in period $1$ ($s = 1$) and whose event date is period 2 ($e = 2$). 
+The rows with `r` unequal to `NA` correspond to the estimation results for $\mathrm{ATEM}(t, s, r, e)$, that is, the estimation results for "pre-treatment periods", which should be approximately 0 under the parallel trends assumption.
 
 The resulting figures are:
 ```{r, eval = T, echo = T}
@@ -127,9 +127,9 @@ did_est$figure$e4
 
 In these figures, the dots and bars correspond to the ATEM estimates and $1 - \alpha$ uniform confidence bands, with the x-axis indicating the time period $t$.
 
-#### The once specification
+#### The *once* specification
 
-The DiD estimation using the once specification:
+The DiD estimation using the *once* specification:
 ```{r, eval = T, echo = T}
 # DiD estimation
 did_est <- didet::didet(yname = "Y",
@@ -154,9 +154,9 @@ The resulting figure is:
 did_est$figure$e1
 ```
 
-#### The number specification
+#### The *number* specification
 
-The DiD estimation using the number specification:
+The DiD estimation using the *number* specification:
 ```{r, eval = T, echo = T}
 # DiD estimation
 did_est <- didet::didet(yname = "Y",
@@ -190,7 +190,7 @@ In the last two figures, the estimation results for $t = 2$ and $t \in \{ 2, 3 \
 
 #### Aggregation
 
-We can obtain a single aggregating estimate by taking the time series mean of the ATEM estimates obtained from the once specification, with
+We can obtain a single aggregation estimate by taking the time series mean of the ATEM estimates obtained from the *once* specification, as follows:
 ```{r, eval = T, echo = T}
 # DiD estimation
 did_est <- didet::didet(yname = "Y",
