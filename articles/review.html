@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">didet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,9 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/review.html">Review of An Effective Treatment Approach to Difference-in-Differences with General Treatment Patterns</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -93,118 +96,121 @@ D_{it}, X_i): i = 1, \dots, N; t = 1, \dots, T \}\)</span>, where</p>
 unit <span class="math inline">\(i\)</span> in period <span class="math inline">\(t\)</span>.</li>
 <li>
 <span class="math inline">\(D_{it}\)</span>: A possibly non-binary
-treatment variable for unit <span class="math inline">\(i\)</span> in
-period <span class="math inline">\(t\)</span>.</li>
+time-varying treatment variable for unit <span class="math inline">\(i\)</span> in period <span class="math inline">\(t\)</span>.</li>
 <li>
 <span class="math inline">\(X_i\)</span>: A unit <span class="math inline">\(i\)</span> specific covariate vector.</li>
 </ul>
 <p>Suppose that <span class="math inline">\(D_{it} = 0\)</span>
 indicates that unit <span class="math inline">\(i\)</span> is a
 comparison unit in period <span class="math inline">\(t\)</span>.</p>
-<p>The goal is to assess the instantaneous and dynamic impacts of the
-treatment on the outcome. With general treatment patterns, there may be
-many treatment paths, and it is generally difficult to estimate
+<p>The goal is to assess the instantaneous and dynamic effects of the
+treatment receipt on the outcome. With general treatment patterns, there
+may be many treatment paths, and it is generally difficult to estimate
 treatment parameters defined with the potential outcome given the entire
-path of treatment adoptions. To circumvent this problem, <a href="https://doi.org/10.48550/arXiv.2212.13226" class="external-link">Yanagi (2023)</a>
-proposes an effective treatment approach to DiD estimation.</p>
+path of treatment adoption. To circumvent this problem, <a href="https://doi.org/10.48550/arXiv.2212.13226" class="external-link">Yanagi (2023)</a>
+proposes an <em>effective treatment</em> approach to DiD estimation.</p>
 </div>
 <div class="section level2">
 <h2 id="effective-treatment">Effective Treatment<a class="anchor" aria-label="anchor" href="#effective-treatment"></a>
 </h2>
-<p>For each <span class="math inline">\(i\)</span> and <span class="math inline">\(t\)</span>, denote <span class="math inline">\(\mathbf{D}_{it} = (D_{i1}, \dots, D_{it})\)</span>
+<p>For each <span class="math inline">\(i\)</span> and <span class="math inline">\(t\)</span>, let <span class="math inline">\(\mathbf{D}_{it} = (D_{i1}, \dots, D_{it})\)</span>
 denote the <span class="math inline">\(t\)</span>-dimensional vector of
 treatment adoptions for unit <span class="math inline">\(i\)</span>.</p>
-<p>The effective treatment function converts the entire treatment path
-<span class="math inline">\(\mathbf{D}_{iT}\)</span> into an empirically
-tractable low-dimensional variable <span class="math inline">\(E_{it}\)</span> that researchers believe to be
-relevant to the outcome in period <span class="math inline">\(t\)</span>. Specifically, consider the realized
-effective treatment <span class="math inline">\(E_{it} =
-E_t(\mathbf{D}_{iT})\)</span> with a user-specified function <span class="math inline">\(E_t\)</span>. Suppose that <span class="math inline">\(E_{it} = 0\)</span> indicates that unit <span class="math inline">\(i\)</span> is a comparison unit in period <span class="math inline">\(t\)</span> under the chosen effective treatment
-<span class="math inline">\(E_t\)</span>.</p>
+<p>The <em>effective treatment function</em> converts the entire
+treatment path <span class="math inline">\(\mathbf{D}_{iT}\)</span> into
+an empirically tractable low-dimensional variable <span class="math inline">\(E_{it}\)</span> that researchers believe to be
+relevant to the outcome in period <span class="math inline">\(t\)</span>. Specifically, consider the
+<em>realized effective treatment</em> <span class="math inline">\(E_{it}
+= E_t(\mathbf{D}_{iT})\)</span> with a user-specified function <span class="math inline">\(E_t\)</span>. Suppose that <span class="math inline">\(E_{it} = 0\)</span> indicates that unit <span class="math inline">\(i\)</span> is a comparison unit in period <span class="math inline">\(t\)</span> under the chosen effective treatment
+<span class="math inline">\(E_t\)</span>. We call nonzero realizations
+of <span class="math inline">\(E_{it}\)</span> <em>effective treatment
+intensity</em>.</p>
 <p>For example, we consider the following specifications useful for
 understanding the instantaneous and dynamic treatment effects:</p>
 <ul>
 <li>The <em>once</em> specification: <span class="math display">\[\begin{align*}
-E_{it}^{\text{O}} = \mathbf{1}\{ \mathbf{D}_{it} \neq 0 \}.
-\end{align*}\]</span>
-</li>
+E_{it}^{\mathrm{O}} = \mathbf{1}\{ \mathbf{D}_{it} \neq 0 \},
+\end{align*}\]</span> indicating whether unit <span class="math inline">\(i\)</span> has received some treatment intensity
+at least <em>once</em> so far.</li>
 <li>The <em>event</em> specification: <span class="math display">\[\begin{align*}
-E_{it}^{\text{E}} =
+E_{it}^{\mathrm{E}} =
       \begin{cases}
           \min \{ s \le t : D_{is} \neq 0 \} &amp; \text{if
 $\mathbf{D}_{it} \neq 0$} \\
           0 &amp;  \text{otherwise}
       \end{cases}
-\end{align*}\]</span>
-</li>
+\end{align*}\]</span> This is the time period so far in which unit <span class="math inline">\(i\)</span> is first treated, that is, the
+so-called <em>event</em> date.</li>
 <li>The <em>number</em> specification: <span class="math display">\[\begin{align*}
-E_{it}^{\text{N}} = \sum_{s=1}^t \mathbf{1}\{ D_{is} \neq 0 \}.
-\end{align*}\]</span>
-</li>
+E_{it}^{\mathrm{N}} = \sum_{s=1}^t \mathbf{1}\{ D_{is} \neq 0 \},
+\end{align*}\]</span> which is the <em>number</em> of treatment
+adoptions so far.</li>
 </ul>
 <p>Let <span class="math inline">\(E_{it}^*\)</span> denote the “true”
 effective treatment specification. Then, the potential outcome for unit
 <span class="math inline">\(i\)</span> in period <span class="math inline">\(t\)</span> given <span class="math inline">\(E_{it}^* = e^*\)</span> is well defined, which is
 denoted as <span class="math inline">\(Y_{it}^*(e^*)\)</span>. By
-constraction, <span class="math inline">\(Y_{it} =
+construction, <span class="math inline">\(Y_{it} =
 Y_{it}^*(E_{it}^*)\)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="target-parameter">Target Parameter<a class="anchor" aria-label="anchor" href="#target-parameter"></a>
 </h2>
 <p>Given a user-specified effective treatment specification <span class="math inline">\(E_t\)</span>, the parameter of interest is the
-average treatment effect for movers (ATEM). For two time periods <span class="math inline">\(t &gt; s\)</span> and an effective treatment
+average treatment effect for movers (ATEM). For two time periods <span class="math inline">\(1 \le s &lt; t\)</span> and effective treatment
 intensity <span class="math inline">\(e \neq 0\)</span>, the ATEM is
 defined by <span class="math display">\[\begin{align*}
-  \text{ATEM}(t, s, e) = \mathbb{E}[ Y_{it} - Y_{it}^*(0) \mid
+  \mathrm{ATEM}(t, s, e) = \mathbb{E}[ Y_{it} - Y_{it}^*(0) \mid
 M_{i,t,s,e} = 1 ],  
 \end{align*}\]</span> where <span class="math inline">\(M_{i,t,s,e} =
-\mathbf{1}\{ E_{it} = e, E_{is} = 0 \}\)</span> indicates a mover.</p>
+\mathbf{1}\{ E_{it} = e, E_{is} = 0 \}\)</span> indicates a
+<em>mover</em> who moves from the comparison group (<span class="math inline">\(E_{is} = 0\)</span>) to receiving effective
+treatment intensity <span class="math inline">\(e\)</span> (<span class="math inline">\(E_{it} = e\)</span>) between periods <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span>.</p>
 <p><a href="https://doi.org/10.48550/arXiv.2212.13226" class="external-link">Yanagi (2023)</a>
 shows that the causal interpretation of the ATEM parameter depends on
-the relationship between the pre-specified <span class="math inline">\(E_t\)</span> and the true <span class="math inline">\(E_t^*\)</span>. Importantly, the ATEM has
+the relationship between the pre-specified <span class="math inline">\(E_t\)</span> and true <span class="math inline">\(E_t^*\)</span>. Importantly, the ATEM has
 meaningful causal interpretation even when the pre-specified <span class="math inline">\(E_t\)</span> is “incorrect” in the sense that the
 potential outcome given <span class="math inline">\(E_t\)</span> is not
 well defined.</p>
 <p>The choice of <span class="math inline">\((t, s, e)\)</span> depends
 on the specification of effective treatment:</p>
 <ul>
-<li>The <em>once</em> specification: Let <span class="math inline">\(\text{ATEM}^{\text{O}}(t, s, 1) = \mathbb{E} [
-Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,1}^{\text{O}} = 1 ]\)</span>, where
-<span class="math inline">\(M_{i,t,s,1}^{\text{O}} = \mathbf{1}\{
-E_{it}^{\text{O}} = 1, E_{is}^{\text{O}} = 0 \}\)</span>. By setting
+<li>The <em>once</em> specification: Let <span class="math inline">\(\mathrm{ATEM}^{\mathrm{O}}(t, s, 1) = \mathbb{E} [
+Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,1}^{\mathrm{O}} = 1 ]\)</span>, where
+<span class="math inline">\(M_{i,t,s,1}^{\mathrm{O}} = \mathbf{1}\{
+E_{it}^{\mathrm{O}} = 1, E_{is}^{\mathrm{O}} = 0 \}\)</span>. By setting
 <span class="math inline">\(s = 1\)</span>, we obtain <span class="math display">\[\begin{align*}
-  \text{ATEM}^{\text{O}}(t, 1, 1)
+  \mathrm{ATEM}^{\mathrm{O}}(t, 1, 1)
   = \mathbb{E} [ Y_{it} - Y_{it}^*(0) \mid D_{i1} = 0, \mathbf{D}_{it}
 \neq 0 ],
 \end{align*}\]</span> which captures the composition of the
 instantaneous and dynamic treatment effects, that is, the effect of
 receiving some treatment intensity at least once between periods <span class="math inline">\(2\)</span> and <span class="math inline">\(t\)</span> for those who did not receive the
 treatment in the first period.</li>
-<li>The <em>event</em> specification: Let <span class="math inline">\(\text{ATEM}^{\text{E}}(t, s, e) = \mathbb{E} [
-Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,e}^{\text{E}} = 1 ]\)</span>, where
-<span class="math inline">\(M_{i,t,s,e}^{\text{E}} = \mathbf{1}\{
-E_{it}^{\text{E}} = e, E_{is}^{\text{E}} = 0 \}\)</span> with <span class="math inline">\(e \ge 2\)</span> and <span class="math inline">\(t
+<li>The <em>event</em> specification: Let <span class="math inline">\(\mathrm{ATEM}^{\mathrm{E}}(t, s, e) = \mathbb{E} [
+Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,e}^{\mathrm{E}} = 1 ]\)</span>, where
+<span class="math inline">\(M_{i,t,s,e}^{\mathrm{E}} = \mathbf{1}\{
+E_{it}^{\mathrm{E}} = e, E_{is}^{\mathrm{E}} = 0 \}\)</span> with <span class="math inline">\(e \ge 2\)</span> and <span class="math inline">\(t
 \ge e\)</span>. Setting <span class="math inline">\(s = e - 1\)</span>,
 we can see that <span class="math display">\[\begin{align*}
-  \text{ATEM}^{\text{E}}(t, e-1, e)
+  \mathrm{ATEM}^{\mathrm{E}}(t, e-1, e)
   = \mathbb{E} \left[ Y_{it} - Y_{it}^*(0) \mid \mathbf{D}_{i,e-1} = 0,
 D_{ie} \neq 0 \right].
 \end{align*}\]</span> This indicates the ATE in period <span class="math inline">\(t\)</span> for those who first received some
 treatment intensity in period <span class="math inline">\(e\)</span>.
 Estimating this ATEM over a set of <span class="math inline">\((t,
 e)\)</span> enables us to understand the instantaneous and dynamic
-treatment effects separately. Specifically, <span class="math inline">\(\text{ATEM}^{\text{E}}(t, e-1, e)\)</span> with
-<span class="math inline">\(t = e\)</span> (resp. with <span class="math inline">\(t &gt; e\)</span>) is informative about the
+treatment effects separately. Specifically, <span class="math inline">\(\mathrm{ATEM}^{\mathrm{E}}(t, e-1, e)\)</span>
+with <span class="math inline">\(t = e\)</span> (resp. with <span class="math inline">\(t &gt; e\)</span>) is informative about the
 instantaneous (resp. dynamic) effect of the first treatment received in
 period <span class="math inline">\(e\)</span>.</li>
-<li>The <em>number</em> specification: Define <span class="math inline">\(\text{ATEM}^{\text{N}}(t, s, e) = \mathbb{E} [
-Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,e}^{\text{N}} = 1 ]\)</span>, where
-<span class="math inline">\(M_{i,t,s,e}^{\text{N}} = \mathbf{1}\{
-E_{it}^{\text{N}} = e, E_{is}^{\text{N}} = 0 \}\)</span> with <span class="math inline">\(e \ge 1\)</span> and <span class="math inline">\(t
+<li>The <em>number</em> specification: Define <span class="math inline">\(\mathrm{ATEM}^{\mathrm{N}}(t, s, e) = \mathbb{E} [
+Y_{it} - Y_{it}^*(0) \mid M_{i,t,s,e}^{\mathrm{N}} = 1 ]\)</span>, where
+<span class="math inline">\(M_{i,t,s,e}^{\mathrm{N}} = \mathbf{1}\{
+E_{it}^{\mathrm{N}} = e, E_{is}^{\mathrm{N}} = 0 \}\)</span> with <span class="math inline">\(e \ge 1\)</span> and <span class="math inline">\(t
 \ge e + 1\)</span>. When we set <span class="math inline">\(s =
 1\)</span>, the ATEM reduces to <span class="math display">\[\begin{align*}
-  \text{ATEM}^{\text{N}}(t, 1, e)
+  \mathrm{ATEM}^{\mathrm{N}}(t, 1, e)
   = \mathbb{E} \left[ Y_{it} - Y_{it}^*(0) \; \middle| \; D_{i1} = 0,
 \sum_{r=2}^t \mathbf{1}\{ D_{ir} \neq 0 \} = e \right].
 \end{align*}\]</span> The ATEM in this case recovers the ATE in period
@@ -218,40 +224,43 @@ adoptions on the outcome.</li>
 <div class="section level2">
 <h2 id="identification-estimation-and-statistical-inference-methods">Identification, Estimation, and Statistical Inference Methods<a class="anchor" aria-label="anchor" href="#identification-estimation-and-statistical-inference-methods"></a>
 </h2>
-<p>Building on <a href="https://doi.org/10.1016/j.jeconom.2020.12.001" class="external-link">Callaway and
-Sant’Anna (2021)</a>, <a href="https://doi.org/10.48550/arXiv.2212.13226" class="external-link">Yanagi (2023)</a>
-develops doubly robust identification and estimation methods and a
-multiplier bootstrap inference procedure for the ATEM parameter under a
-parallel trends assumption. See the paper for more details.</p>
+<p><a href="https://doi.org/10.48550/arXiv.2212.13226" class="external-link">Yanagi (2023)</a>
+builds on <a href="https://doi.org/10.1016/j.jeconom.2020.12.001" class="external-link">Callaway and
+Sant’Anna (2021)</a> and develops doubly robust identification,
+estimation, and bootstrap inference methods for the ATEM parameter under
+a conditional parallel trends assumption. See the paper for more
+details.</p>
 </div>
 <div class="section level2">
 <h2 id="pre-trends-test">Pre-trends Test<a class="anchor" aria-label="anchor" href="#pre-trends-test"></a>
 </h2>
-<p>Similar to the staggered adoption case, we can partly justify the
-validity of parallel trends by checking “pre-trends”. To be specific,
-for three time periods <span class="math inline">\(t &gt; s \ge
-r\)</span> and an effective treatment intesnity <span class="math inline">\(e \neq 0\)</span>, define <span class="math display">\[\begin{align*}
-  \text{ATEM}(t, s, r, e) = \mathbb{E}[ Y_{ir} - Y_{ir}^*(0) \mid
+<p>Similar to the staggered adoption case, we can assess the validity of
+parallel trends by checking “pre-trends”. To be specific, for three time
+periods <span class="math inline">\(t &gt; s \ge r\)</span> and
+effective treatment intensity <span class="math inline">\(e \neq
+0\)</span>, define <span class="math display">\[\begin{align*}
+  \mathrm{ATEM}(t, s, r, e) = \mathbb{E}[ Y_{ir} - Y_{ir}^*(0) \mid
 M_{i,t,s,e} = 1 ].
-\end{align*}\]</span> Under the parallel trends assumption, it can be
-shown that <span class="math inline">\(\text{ATEM}(t, s, r, e) =
-0\)</span>. Thus, the parallel trends assumption would be implausible if
-we find statistical evidence against <span class="math inline">\(\text{ATEM}(t, s, r, e) = 0\)</span>.</p>
+\end{align*}\]</span> We can show that <span class="math inline">\(\mathrm{ATEM}(t, s, r, e) = 0\)</span> under the
+parallel trends assumption. Thus, the parallel trends assumption would
+be implausible if we find statistical evidence against <span class="math inline">\(\mathrm{ATEM}(t, s, r, e) = 0\)</span>.</p>
 </div>
 <div class="section level2">
-<h2 id="practical-recommendations">Practical Recommendations<a class="anchor" aria-label="anchor" href="#practical-recommendations"></a>
+<h2 id="practical-recommendation">Practical Recommendation<a class="anchor" aria-label="anchor" href="#practical-recommendation"></a>
 </h2>
 <p>It is common practice to perform event study analyses prior to formal
-DiD estimation. Thus, it would be natural to take the event
-specification as a good starting point and to plot <span class="math inline">\(\text{ATEM}^{\mathrm{E}}(t, e-1, e)\)</span> over
-a set of <span class="math inline">\((t, e)\)</span>, including
+DiD estimation. Thus, it would be natural to take the <em>event</em>
+specification as a good starting point and to plot <span class="math inline">\(\mathrm{ATEM}^{\mathrm{E}}(t, e-1, e)\)</span>
+over a set of <span class="math inline">\((t, e)\)</span>, including
 ``pre-trends’’ to assess the validity of parallel trends. Then, it would
 be desirable to further examine the treatment effect heterogeneity by
-trying the number specification. Finally, to obtain more precise
-estimates, it would be recommended to estimate <span class="math inline">\(\mathrm{ATEM}^{\mathrm{O}}(t, 1, 1)\)</span> and
-its time-series average as useful aggregation parameters, that is, <span class="math display">\[\begin{align*}
-    \mathrm{ATEM}^{\mathrm{AGG}}
-    = \frac{1}{(T - 1)} \sum_{t=2}^T \text{ATEM}^{\text{O}}(t, 1, 1).
+trying the <em>number</em> specification. Finally, to obtain more
+precise estimates, it would be recommended to estimate the ATEM
+parameter defined with the <em>once</em> specification and its
+time-series average as useful aggregation parameters, that is, <span class="math display">\[\begin{align*}
+    \mathrm{ATEM}^{\mathrm{A}}
+    = \frac{1}{(T - 1)} \sum_{t=2}^T \mathrm{ATEM}^{\mathrm{O}}(t, 1,
+1).
 \end{align*}\]</span></p>
 </div>
 <div class="section level2">
