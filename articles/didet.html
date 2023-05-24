@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">didet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -156,7 +156,8 @@ results for the probabilities of being movers.</li>
 <code>stayer</code>: A data.frame that collects the estimation
 results for the probabilities of being stayers.</li>
 <li>
-<code>figure</code>: A list that contains the figures for <span class="math inline">\(\mathrm{ATEM}(t,s,e)\)</span> and <span class="math inline">\(\mathrm{ATEM}(t, s, r, e)\)</span>.</li>
+<code>figure</code>: A list that contains the ggplot2 figures for
+<span class="math inline">\(\mathrm{ATEM}(t,s,e)\)</span> and <span class="math inline">\(\mathrm{ATEM}(t, s, r, e)\)</span>.</li>
 </ul>
 </div>
 </div>
@@ -224,15 +225,15 @@ approximately 0 under the parallel trends assumption.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Event date = 2</span></span>
 <span><span class="va">did_est</span><span class="op">$</span><span class="va">figure</span><span class="op">$</span><span class="va">e2</span></span></code></pre></div>
-<p><img src="didet_files/figure-html/unnamed-chunk-6-1.png" width="768"></p>
+<p><img src="didet_files/figure-html/unnamed-chunk-6-1.png" width="720"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Event date = 3</span></span>
 <span><span class="va">did_est</span><span class="op">$</span><span class="va">figure</span><span class="op">$</span><span class="va">e3</span></span></code></pre></div>
-<p><img src="didet_files/figure-html/unnamed-chunk-6-2.png" width="768"></p>
+<p><img src="didet_files/figure-html/unnamed-chunk-6-2.png" width="720"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Event date = 4</span></span>
 <span><span class="va">did_est</span><span class="op">$</span><span class="va">figure</span><span class="op">$</span><span class="va">e4</span></span></code></pre></div>
-<p><img src="didet_files/figure-html/unnamed-chunk-6-3.png" width="768"></p>
+<p><img src="didet_files/figure-html/unnamed-chunk-6-3.png" width="720"></p>
 <p>In these figures, the dots and bars correspond to the ATEM estimates
 and <span class="math inline">\(1 - \alpha\)</span> uniform confidence
 bands, with the x-axis indicating the time period <span class="math inline">\(t\)</span>.</p>
@@ -263,7 +264,7 @@ bands, with the x-axis indicating the time period <span class="math inline">\(t\
 <p>The resulting figure is:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">did_est</span><span class="op">$</span><span class="va">figure</span><span class="op">$</span><span class="va">e1</span></span></code></pre></div>
-<p><img src="didet_files/figure-html/unnamed-chunk-9-1.png" width="768"></p>
+<p><img src="didet_files/figure-html/unnamed-chunk-9-1.png" width="720"></p>
 </div>
 <div class="section level4">
 <h4 id="the-number-specification">The <em>number</em> specification<a class="anchor" aria-label="anchor" href="#the-number-specification"></a>
@@ -295,15 +296,15 @@ bands, with the x-axis indicating the time period <span class="math inline">\(t\
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Number of treatment adoptions = 1</span></span>
 <span><span class="va">did_est</span><span class="op">$</span><span class="va">figure</span><span class="op">$</span><span class="va">e1</span></span></code></pre></div>
-<p><img src="didet_files/figure-html/unnamed-chunk-12-1.png" width="768"></p>
+<p><img src="didet_files/figure-html/unnamed-chunk-12-1.png" width="720"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Number of treatment adoptions = 2</span></span>
 <span><span class="va">did_est</span><span class="op">$</span><span class="va">figure</span><span class="op">$</span><span class="va">e2</span></span></code></pre></div>
-<p><img src="didet_files/figure-html/unnamed-chunk-12-2.png" width="768"></p>
+<p><img src="didet_files/figure-html/unnamed-chunk-12-2.png" width="720"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Number of treatment adoptions = 3</span></span>
 <span><span class="va">did_est</span><span class="op">$</span><span class="va">figure</span><span class="op">$</span><span class="va">e3</span></span></code></pre></div>
-<p><img src="didet_files/figure-html/unnamed-chunk-12-3.png" width="768"></p>
+<p><img src="didet_files/figure-html/unnamed-chunk-12-3.png" width="720"></p>
 <p>In the last two figures, the estimation results for <span class="math inline">\(t = 2\)</span> and <span class="math inline">\(t
 \in \{ 2, 3 \}\)</span> are suppressed because no units experienced the
 two and three times of treatment adoptions in these time periods.</p>
