@@ -46,7 +46,7 @@ A list that contains the following elements.
 \item{ATEM}{A data.frame that collects results for ATEM(t,s,e)}
 \item{mover}{A data.frame that collects results for the probability of mover}
 \item{stayer}{A data.frame that collects results for the probability of stayer}
-\item{figure}{A list that contains the figures for ATEM(t,s,e)}
+\item{figure}{A list that contains the ggplot2 figures for ATEM(t,s,e)}
 }
 \description{
 The `didet()` function takes the effective treatment approach

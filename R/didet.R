@@ -26,7 +26,7 @@
 #' \item{ATEM}{A data.frame that collects results for ATEM(t,s,e)}
 #' \item{mover}{A data.frame that collects results for the probability of mover}
 #' \item{stayer}{A data.frame that collects results for the probability of stayer}
-#' \item{figure}{A list that contains the figures for ATEM(t,s,e)}
+#' \item{figure}{A list that contains the ggplot2 figures for ATEM(t,s,e)}
 #'
 #' @examples
 #' set.seed(1)
@@ -49,10 +49,11 @@
 #' @importFrom data.table :=
 #' @importFrom dplyr arrange distinct filter group_by mutate pull
 #' row_number sym ungroup
-#' @importFrom ggplot2 aes element_line element_rect element_text
-#' geom_errorbar geom_hline geom_point ggplot labs position_dodge
-#' scale_color_manual scale_x_discrete scale_y_continuous
-#' theme theme_classic theme_set
+#' @importFrom ggplot2 aes guides guide_legend element_line element_rect
+#' element_text geom_errorbar geom_hline geom_point ggplot labs position_dodge
+#' scale_color_manual scale_shape_manual
+#' scale_x_discrete scale_y_continuous
+#' theme theme_classic theme_set unit
 #' @importFrom magrittr %>%
 #' @importFrom rlang UQ
 #' @importFrom utils globalVariables
@@ -561,7 +562,7 @@ didet <- function(yname,
                                      na.rm = TRUE)
 
   c_ATEM_t_s_r_e <- stats::quantile(max_t_stat_ATEM_t_s_r_e_b,
-                                      probs = 1 - alp)
+                                    probs = 1 - alp)
 
   # Bootstrap (1 - alp) uniform confidence band
   CIL_ATEM_t_s_r_e <- ATEM_t_s_r_e - c_ATEM_t_s_r_e * SE_ATEM_t_s_r_e
@@ -661,7 +662,7 @@ didet <- function(yname,
         mutate(t = as.character(t))
 
       # Title
-      mytitle <- "ATEM: The once specification"
+      mytitle <- "The once specification"
 
       # Make a figure
       fig <- ggplot(df_ATEM, aes(x = t, y = est, color = "#F8766D")) +
@@ -677,14 +678,23 @@ didet <- function(yname,
         mutate(t = as.character(t))
 
       # Title
-      mytitle <- paste0("ATEM: The event specification (event date = ", e0, ")")
+      mytitle <- paste0("The event specification (event date = ", e0, ")")
 
       # Make a figure
-      fig <- ggplot(df_ATEM, aes(x = t, y = est, color = prepost)) +
+      fig <- ggplot(df_ATEM, aes(x = t,
+                                 y = est,
+                                 color    = prepost,
+                                 shape    = prepost)) +
         scale_color_manual(name = "",
                            breaks = c("Pre", "Post"),
                            values = c("#00BFC4", "#F8766D"),
-                           limits = c("Pre", "Post"))
+                           limits = c("Pre", "Post")) +
+        scale_shape_manual(name = "",
+                           breaks = c("Pre", "Post"),
+                           values = c(17, 16),
+                           limits = c("Pre", "Post")) +
+        theme(legend.key.width  = unit(2, "cm")) +
+        guides(shape = guide_legend(override.aes = list(size = 7)))
 
     } else if (specification == "number") {
 
@@ -694,7 +704,7 @@ didet <- function(yname,
         mutate(t = as.character(t))
 
       # Title
-      mytitle <- paste0("ATEM: The number specification (number = ", e0, ")")
+      mytitle <- paste0("The number specification (number = ", e0, ")")
 
       # Make a figure
       fig <- ggplot(df_ATEM, aes(x = t, y = est, color = "#F8766D")) +
@@ -716,12 +726,12 @@ didet <- function(yname,
           ymax = est - est + CIU
         ),
         position = position_dodge(0.5),
-        width = 0.3,
+        width = 0.1,
         linewidth = 2
       ) +
       geom_point(
         position = position_dodge(0.5),
-        size = 5
+        size = 6
       ) +
       scale_x_discrete(
         breaks = supp_t,
