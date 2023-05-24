@@ -125,7 +125,7 @@ did_est$figure$e3
 did_est$figure$e4
 ```
 
-In these figures, the dots and bars correspond to the ATEM estimates and $1 - \alpha$ uniform confidence bands, with the x-axis indicating the time period $t$.
+In these figures, the circles/squares and bars correspond to the ATEM estimates and $1 - \alpha$ uniform confidence bands, with the x-axis indicating the time period $t$.
 
 #### The *once* specification
 

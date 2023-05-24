@@ -691,7 +691,7 @@ didet <- function(yname,
                            limits = c("Pre", "Post")) +
         scale_shape_manual(name = "",
                            breaks = c("Pre", "Post"),
-                           values = c(17, 16),
+                           values = c(15, 16),
                            limits = c("Pre", "Post")) +
         theme(legend.key.width  = unit(2, "cm")) +
         guides(shape = guide_legend(override.aes = list(size = 7)))
