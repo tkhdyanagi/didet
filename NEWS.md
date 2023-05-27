@@ -1,3 +1,7 @@
+# didet 0.1.6
+
+* Improved figures
+
 # didet 0.1.5
 
 * Improved figures

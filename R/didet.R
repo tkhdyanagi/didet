@@ -50,7 +50,8 @@
 #' @importFrom dplyr arrange distinct filter group_by mutate pull
 #' row_number sym ungroup
 #' @importFrom ggplot2 aes guides guide_legend element_line element_rect
-#' element_text geom_errorbar geom_hline geom_point ggplot labs position_dodge
+#' element_text geom_errorbar geom_hline geom_point
+#' ggplot labs position_dodge
 #' scale_color_manual scale_shape_manual
 #' scale_x_discrete scale_y_continuous
 #' theme theme_classic theme_set unit
@@ -743,7 +744,8 @@ didet <- function(yname,
       geom_hline(
         yintercept = 0,
         color = "black",
-        linetype = "dotted"
+        linetype = "dotted",
+        linewidth = 1.5
       )
 
     # Record
