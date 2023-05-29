@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">didet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -230,6 +230,13 @@ Sant’Anna (2021)</a> and develops doubly robust identification,
 estimation, and bootstrap inference methods for the ATEM parameter under
 a conditional parallel trends assumption. See the paper for more
 details.</p>
+<p>For estimation, the <code><a href="../reference/didet.html">didet()</a></code> function internally calls
+the <code>drdid_panel()</code> function from the <strong>DRDID</strong>
+package (<a href="https://doi.org/10.1016/j.jeconom.2020.06.003" class="external-link">Sant’Anna and Zhao,
+2020</a>). More precisely, in the first-step estimation, the outcome
+regression function and generalized propensity score are estimated by
+the ordinary least squares and maximum likelihood (Logit),
+respectively.</p>
 </div>
 <div class="section level2">
 <h2 id="pre-trends-test">Pre-trends Test<a class="anchor" aria-label="anchor" href="#pre-trends-test"></a>
@@ -269,6 +276,10 @@ time-series average as useful aggregation parameters, that is, <span class="math
 <ul>
 <li>Callaway, B., and Sant’Anna, P. HC, 2021. Difference-in-differences
 with multiple time periods. Journal of Econometrics 225(2), 200-230. <a href="https://doi.org/10.1016/j.jeconom.2020.12.001" class="external-link">Link</a>
+</li>
+<li>Sant’Anna, P. HC, and Zhao, J, 2020. Doubly robust
+difference-in-differences estimators. Journal of Econometrics, 219(1),
+101-122. <a href="https://doi.org/10.1016/j.jeconom.2020.06.003" class="external-link">Link</a>
 </li>
 <li>Yanagi, T., 2023. An effective treatment approach to
 difference-in-differences with general treatment patterns. arXiv

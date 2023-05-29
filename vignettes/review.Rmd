@@ -120,6 +120,9 @@ By estimating this ATEM over a set of $(t, e)$, we can separately assess the ins
 [Yanagi (2023)](https://doi.org/10.48550/arXiv.2212.13226) builds on [Callaway and Sant'Anna (2021)](https://doi.org/10.1016/j.jeconom.2020.12.001) and develops doubly robust identification, estimation, and bootstrap inference methods for the ATEM parameter under a conditional parallel trends assumption.
 See the paper for more details.
 
+For estimation, the `didet()` function internally calls the `drdid_panel()` function from the **DRDID** package ([Sant'Anna and Zhao, 2020](https://doi.org/10.1016/j.jeconom.2020.06.003)).
+More precisely, in the first-step estimation, the outcome regression function and generalized propensity score are estimated by the ordinary least squares and maximum likelihood (Logit), respectively.
+
 ## Pre-trends Test
 
 Similar to the staggered adoption case, we can assess the validity of parallel trends by checking "pre-trends".
@@ -147,6 +150,10 @@ Finally, to obtain more precise estimates, it would be recommended to estimate t
 Difference-in-differences with multiple time periods. 
 Journal of Econometrics 225(2), 200-230.
 [Link](https://doi.org/10.1016/j.jeconom.2020.12.001)
+- Sant'Anna, P. HC, and Zhao, J, 2020.
+Doubly robust difference-in-differences estimators.
+Journal of Econometrics, 219(1), 101-122. 
+[Link](https://doi.org/10.1016/j.jeconom.2020.06.003)
 - Yanagi, T., 2023. 
 An effective treatment approach to difference-in-differences with general treatment patterns. 
 arXiv preprint arXiv:2212.13226.
