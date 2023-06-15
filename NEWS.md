@@ -1,3 +1,7 @@
+# didet 0.1.8
+
+* Improved figures
+
 # didet 0.1.7
 
 * Updated vignettes

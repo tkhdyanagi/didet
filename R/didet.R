@@ -744,7 +744,7 @@ didet <- function(yname,
       geom_hline(
         yintercept = 0,
         color = "black",
-        linetype = "dotted",
+        linetype = "dashed",
         linewidth = 1.5
       )
 
